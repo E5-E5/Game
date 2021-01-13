@@ -1,6 +1,8 @@
 import os
 import pygame
 
+next = False
+s = 1
 
 def load_image(name, color_key=None):
     fullname = os.path.join('data', name)
@@ -31,6 +33,11 @@ class Mountain(pygame.sprite.Sprite):
         # располагаем горы внизу
         self.rect.bottom = height
 
+
+class Checkbox(pygame.sprite.Sprite):
+    def __init__(self, x, y, color_not_check=):
+
+
 class Finish(pygame.sprite.Sprite):
     image = load_image(f"C:/Users/USER/Desktop/piton/RABOTI/Игра/finish{s}.png", -1)
 
@@ -59,6 +66,9 @@ class Landing(pygame.sprite.Sprite):
     def update(self):
         if pygame.sprite.collide_mask(self, mountain):
             pygame.mouse.set_pos(450, 500)
+        if pygame.sprite.collide_mask(self, finish):
+            global next
+            next = True
 
 
 pygame.init()
@@ -77,6 +87,12 @@ running = True
 pygame.mouse.set_visible(False)
 pygame.mouse.set_pos(450, 500)
 while running:
+    # в теории эдо должен быть переход на след уровень, но почему так не работает
+    if next:
+        s += 1
+        finish = Finish()
+        mountain = Mountain()
+        next = False
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
