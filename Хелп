@@ -1,0 +1,310 @@
+import os
+import pygame
+
+next = False
+s = 1
+text = 'Хаю хай'
+q = ['Как дела', 'Подлива?']
+next_question = False
+
+def load_image(name, color_key=None):
+    fullname = os.path.join('data', name)
+    try:
+        image = pygame.image.load(fullname)
+    except pygame.error as message:
+        print('Cannot load image:', name)
+        raise SystemExit(message)
+
+    if color_key is not None:
+        if color_key == -1:
+            color_key = pygame.Color('black')
+        image.set_colorkey(color_key)
+    else:
+        image = image.convert_alpha()
+    return image
+
+
+class Mountain(pygame.sprite.Sprite):
+    image = load_image(f"C:/Users/USER/Desktop/piton/RABOTI/Игра/start{s}.png", -1)
+
+    def __init__(self):
+        super().__init__(all_sprites)
+        self.image = Mountain.image
+        self.rect = self.image.get_rect()
+        # вычисляем маску для эффективного сравнения
+        self.mask = pygame.mask.from_surface(self.image)
+        # располагаем горы внизу
+        self.rect.bottom = height
+
+    def update(self):
+        self.image = load_image(f"C:/Users/USER/Desktop/piton/RABOTI/Игра/start{s}.png", -1)
+        self.mask = pygame.mask.from_surface(self.image)
+
+
+class Finish(pygame.sprite.Sprite):
+    image = load_image(f"C:/Users/USER/Desktop/piton/RABOTI/Игра/finish{s}.png", -1)
+
+    def __init__(self):
+        super().__init__(all_sprites)
+        self.image = Finish.image
+        self.rect = self.image.get_rect()
+        # вычисляем маску для эффективного сравнения
+        self.mask = pygame.mask.from_surface(self.image)
+        # располагаем горы внизу
+        self.rect.bottom = height
+
+    def update(self):
+        self.image = load_image(f"C:/Users/USER/Desktop/piton/RABOTI/Игра/finish{s}.png", -1)
+        self.mask = pygame.mask.from_surface(self.image)
+
+
+
+class Landing(pygame.sprite.Sprite):
+    image = load_image("C:/Users/USER/Desktop/piton/RABOTI/pt.png", -1)
+
+    def __init__(self, x, y):
+        super().__init__(all_sprites)
+        self.image = Landing.image
+        self.rect = self.image.get_rect()
+        # вычисляем маску для эффективного сравнения
+        self.mask = pygame.mask.from_surface(self.image)
+        self.rect.x = x
+        self.rect.y = y
+
+    def update(self):
+        if pygame.sprite.collide_mask(self, mountain):
+            pygame.mouse.set_pos(450, 500)
+        if pygame.sprite.collide_mask(self, finish):
+            global next_question, next
+            next_question = True
+            next = True
+            print(next_question, next)
+
+
+class Button:
+    def __init__(self):
+        self.check = False
+
+    def create_button(self, surface, color, x, y, length, height, width, text, text_color):
+        surface = self.draw_button(surface, color, length, height, x, y, width)
+        surface = self.write_text(surface, text, text_color, length, height, x, y)
+        self.rect = pygame.Rect(x, y, length, height)
+        return surface
+
+    def write_text(self, surface, text, text_color, length, height, x, y):
+        font_size = int(length // len(text))
+        myFont = pygame.font.SysFont("Calibri", 30)
+        myText = myFont.render(text, 1, text_color)
+        surface.blit(myText, ((x + length / 2) - myText.get_width() / 2, (y + height / 2) - myText.get_height() / 2))
+        return surface
+
+    def draw_button(self, surface, color, length, height, x, y, width):
+        for i in range(1, 10):
+            s = pygame.Surface((length + (i * 2), height + (i * 2)))
+            s.fill(color)
+            alpha = (255 / (i + 2))
+            if alpha <= 0:
+                alpha = 1
+            s.set_alpha(alpha)
+            pygame.draw.rect(s, color, (x - i, y - i, length + i, height + i), width)
+            surface.blit(s, (x - i, y - i))
+        pygame.draw.rect(surface, color, (x, y, length, height), 0)
+        pygame.draw.rect(surface, (190, 190, 190), (x, y, length, height), 1)
+        return surface
+
+    def pressed(self, mouse):
+        if mouse[0] > self.rect.topleft[0]:
+            if mouse[1] > self.rect.topleft[1]:
+                if mouse[0] < self.rect.bottomright[0]:
+                    if mouse[1] < self.rect.bottomright[1]:
+                        if not self.check:
+                            self.check = True
+                        else:
+                            self.check = False
+                        print(self.checked())
+                        return True
+                    else:
+                        return False
+                else:
+                    return False
+            else:
+                return False
+        else:
+            return False
+
+    def checked(self):
+        return self.check
+
+pygame.init()
+
+size = width, height = 750, 750
+screen = pygame.display.set_mode(size)
+
+# группа, содержащая все спрайты
+all_sprites = pygame.sprite.Group()
+
+mountain = Mountain()
+finish = Finish()
+clock = pygame.time.Clock()
+land = Landing(500, 500)
+running = True
+# pygame.mouse.set_visible(False)
+pygame.mouse.set_pos(450, 500)
+game = 3
+
+
+def start_screen():
+    global game
+    fon = pygame.transform.scale(load_image('C:/Users/USER/Desktop/piton/RABOTI/Игра/image.bmp'), (width, height))
+    screen.blit(fon, (0, 0))
+
+    button_1 = Button()
+    button_1.create_button(screen, 'red', 40, 40, 100, 200, 100, 'Начать новую игру', 'black')
+
+    button_2 = Button()
+    button_2.create_button(screen, 'red', 140, 140, 100, 200, 100, 'Продолжить', 'black')
+
+    button_3 = Button()
+    button_3.create_button(screen, 'red', 240, 240, 100, 200, 100, 'Настройки', 'black')
+
+    button_4 = Button()
+    button_4.create_button(screen, 'red', 340, 340, 100, 200, 100, 'Выход', 'black')
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                # return  # начинаем игру
+                if button_1.pressed(event.pos):
+                    game = 1
+                elif button_2.pressed(event.pos):
+                    game = 2
+                elif button_3.pressed(event.pos):
+                    game = 3
+                    options()
+                elif button_4.pressed(event.pos):
+                    terminate()
+                return
+
+        pygame.display.flip()
+        clock.tick(50)
+
+
+def options():
+    intro_text = ["ЗАСТАВКА", "",
+                  "Правила игры",
+                  "Если в правилах несколько строк,",
+                  "приходится выводить их построчно"]
+    global game
+    fon = pygame.transform.scale(load_image('C:/Users/USER/Desktop/piton/RABOTI/Игра/image.bmp'), (width, height))
+    screen.blit(fon, (0, 0))
+    font = pygame.font.Font(None, 30)
+    text_coord = 50
+    button_1 = Button()
+    button_1.create_button(screen, 'red', 40, 40, 100, 200, 100, 'Назад', 'black')
+    for line in intro_text:
+        string_rendered = font.render(line, True, pygame.Color('black'))
+        intro_rect = string_rendered.get_rect()
+        text_coord += 10
+        intro_rect.top = text_coord
+        intro_rect.x = 10
+        text_coord += intro_rect.height
+        screen.blit(string_rendered, intro_rect)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                # return  # начинаем игру
+                if button_1.pressed(event.pos):
+                    return
+
+        pygame.display.flip()
+        clock.tick(50)
+
+
+def Question(text, ques):
+    intro_text = ["Когда ты какал"]
+    fon = pygame.transform.scale(load_image('C:/Users/USER/Desktop/piton/RABOTI/Игра/image.bmp'), (width, height))
+    screen.blit(fon, (0, 0))
+    font = pygame.font.Font(None, 30)
+    text_coord = 50
+    button_question = Button()
+    button_question.create_button(screen, 'red', 40, 40, 100, 200, 100, 'Назад', 'black')
+    string_rendered = font.render('zzzzzzzzzzzzzzzzz', True, pygame.Color('black'))
+
+    intro_rect = string_rendered.get_rect()
+    intro_rect.top = text_coord
+    screen.blit(string_rendered, intro_rect)
+
+    button_1 = Button()
+    button_2 = Button()
+    button_3 = Button()
+    button_4 = Button()
+    button_5 = Button()
+    if len(ques) >= 1:
+        button_1.create_button(screen, 'white', 100, 100, 100, 200, 100, '124421', 'black')
+    if len(ques) >= 2:
+        button_2.create_button(screen, 'white', 200, 200, 100, 200, 100, '21421', 'black')
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                # return  # начинаем игру
+                if button_1.pressed(event.pos):
+                    print('Первый отв')
+                elif button_2.pressed(event.pos):
+                    print('Второй отв')
+                elif button_question.pressed(event.pos):
+                    print(124523)
+                    global next_question
+                    next_question = False
+                return
+
+
+while game == 3:
+    start_screen()
+
+if game == 1:
+    s = 1
+    f = open('autosave.txt', 'w')
+    f.write(str(s))
+    f.close()
+if game == 2:
+    f = open('autosave.txt', 'r')
+    for i in f:
+        s = i
+    f.close()
+
+if game == 1 or game == 2:
+    while running:
+        if next:
+            print('21314', next_question)
+            if next_question:
+                Question('dfgthjk', q)
+            else:
+                s += 1
+                f = open('autosave.txt', 'w')
+                f.write(str(s))
+                f.close()
+                finish.update()
+                mountain.update()
+                next = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEMOTION:
+                x1, y1 = event.pos
+                land.rect.x = x1
+                land.rect.y = y1
+                screen.fill(pygame.Color("white"))
+                all_sprites.draw(screen)
+        all_sprites.update()
+        pygame.display.flip()
+        clock.tick(50)
+
+pygame.quit()
