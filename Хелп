@@ -173,7 +173,7 @@ def start_screen():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                terminate()
+                pygame.quit()
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 # return  # начинаем игру
                 if button_1.pressed(event.pos):
@@ -184,7 +184,7 @@ def start_screen():
                     game = 3
                     options()
                 elif button_4.pressed(event.pos):
-                    terminate()
+                    pygame.quit()
                 return
 
         pygame.display.flip()
@@ -215,7 +215,7 @@ def options():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                terminate()
+                pygame.quit()
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 # return  # начинаем игру
                 if button_1.pressed(event.pos):
@@ -252,7 +252,7 @@ def Question(text, ques):
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                terminate()
+                pygame.quit()
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 # return  # начинаем игру
                 if button_1.pressed(event.pos):
@@ -308,3 +308,4 @@ if game == 1 or game == 2:
         clock.tick(50)
 
 pygame.quit()
+
