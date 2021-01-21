@@ -18,6 +18,7 @@ class Finish(pygame.sprite.Sprite):
             QUESTION_1 = Button()
             QUESTION_1.create_button(screen, COLOR, 40, 240, 50, 50, 100,
                                      '0', 'black')
+            
             if event.type == pygame.MOUSEBUTTONUP:
                 # return  # начинаем игру
                 if QUESTION_1.pressed(event.pos):
