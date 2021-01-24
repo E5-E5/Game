@@ -46,7 +46,7 @@ class Finish(pygame.sprite.Sprite):
 
     def __init__(self):
         super().__init__(all_sprites)
-        self.image = load_image(f"C:/Users/USER/Desktop/piton/RABOTI/Игра/data/Finish{s}.png", -1)
+        self.image = load_image(f"data/Finish{s}.png", -1)
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.bottom = 750
@@ -55,7 +55,7 @@ class Finish(pygame.sprite.Sprite):
         self.bad = 0
 
     def update(self):
-        self.image = load_image(f"C:/Users/USER/Desktop/piton/RABOTI/Игра/data/Finish{s}.png", -1)
+        self.image = load_image(f"data/Finish{s}.png", -1)
         self.mask = pygame.mask.from_surface(self.image)
         if s % 2 == 0 and s < 26:
             if s < 11:
@@ -128,7 +128,7 @@ class Finish(pygame.sprite.Sprite):
 
 class Maze(pygame.sprite.Sprite):
     print(s)
-    image = load_image(f"C:/Users/USER/Desktop/piton/RABOTI/Игра/data/Level{s}.png", -1)
+    image = load_image(f"data/Level{s}.png", -1)
 
     def __init__(self):
         super().__init__(all_sprites)
@@ -140,17 +140,17 @@ class Maze(pygame.sprite.Sprite):
         self.rect.bottom = 750
 
     def update(self):
-        self.image = load_image(f"C:/Users/USER/Desktop/piton/RABOTI/Игра/data/Level{s}.png", -1)
+        self.image = load_image(f"data/Level{s}.png", -1)
         self.mask = pygame.mask.from_surface(self.image)
 
 
 class Trigger(pygame.sprite.Sprite):
     if s == 13:
-        image = load_image(f"C:/Users/USER/Desktop/piton/RABOTI/Игра/data/trigger13.png", -1)
+        image = load_image(f"data/trigger13.png", -1)
     elif s == 23:
-        image = load_image(f"C:/Users/USER/Desktop/piton/RABOTI/Игра/data/trigger23.png", -1)
+        image = load_image(f"data/trigger23.png", -1)
     else:
-        image = load_image(f"C:/Users/USER/Desktop/piton/RABOTI/Игра/data/Finish28.png", -1)
+        image = load_image(f"data/Finish28.png", -1)
 
     def __init__(self):
         super().__init__(all_sprites)
@@ -161,13 +161,13 @@ class Trigger(pygame.sprite.Sprite):
 
     def update(self):
         if s == 13:
-            self.image = load_image(f"C:/Users/USER/Desktop/piton/RABOTI/Игра/data/Trigger13.png", -1)
+            self.image = load_image(f"data/Trigger13.png", -1)
             self.mask = pygame.mask.from_surface(self.image)
         elif s == 23:
-            self.image = load_image(f"C:/Users/USER/Desktop/piton/RABOTI/Игра/data/Trigger23.png", -1)
+            self.image = load_image(f"data/Trigger23.png", -1)
             self.mask = pygame.mask.from_surface(self.image)
         else:
-            self.image = load_image(f"C:/Users/USER/Desktop/piton/RABOTI/Игра/data/Finish28.png", -1)
+            self.image = load_image(f"data/Finish28.png", -1)
             self.mask = pygame.mask.from_surface(self.image)
 
 
@@ -175,7 +175,7 @@ screen_rect = (0, 0, 750, 750)
 
 
 class Particle(pygame.sprite.Sprite):
-    fire = [load_image("C:/Users/USER/Desktop/piton/RABOTI/Игра/data/flowerpart.png")]
+    fire = [load_image("data/flowerpart.png")]
     for scale in (5, 10, 20):
         fire.append(pygame.transform.scale(fire[0], (scale, scale)))
 
@@ -265,7 +265,7 @@ class Button:
 
 
 class Boss(pygame.sprite.Sprite):
-    image = load_image("C:/Users/USER/Desktop/piton/RABOTI/Игра/data/boss.png", -1)
+    image = load_image("data/boss.png", -1)
 
     def __init__(self):
         super().__init__(all_sprites)
@@ -293,7 +293,7 @@ class Cursor(pygame.sprite.Sprite):
 
     def __init__(self, x, y):
         super().__init__(all_sprites)
-        self.image = load_image("C:/Users/USER/Desktop/piton/RABOTI/Игра/data/arrow.png", -1)
+        self.image = load_image("data/arrow.png", -1)
         self.rect = self.image.get_rect()
         # вычисляем маску для эффективного сравнения
         self.mask = pygame.mask.from_surface(self.image)
@@ -305,12 +305,12 @@ class Cursor(pygame.sprite.Sprite):
         global s
         global rectcount
         if s > 9:
-            self.image = load_image("C:/Users/USER/Desktop/piton/RABOTI/Игра/data/cursor2.png", -1)
+            self.image = load_image("data/cursor2.png", -1)
             self.mask = pygame.mask.from_surface(self.image)
         badcollide = pygame.mixer.Sound(
-            r'C:/Users/USER/Desktop/piton/RABOTI/Игра/data/badcollide.wav')
+            r'data/badcollide.wav')
         goodcollide = pygame.mixer.Sound(
-            r'C:/Users/USER/Desktop/piton/RABOTI/Игра/data/goodcollide.wav')
+            r'data/goodcollide.wav')
         if (s % 2 != 0 or s == 28) and pygame.sprite.collide_mask(self, mountain):
             pygame.mouse.set_pos(start_x.get(s), start_y.get(s))
             create_particles(pygame.mouse.get_pos())
@@ -366,7 +366,7 @@ game = 3
 
 def start_screen():
     global game
-    fon = pygame.transform.scale(load_image('C:/Users/USER/Desktop/piton/RABOTI/Игра/data/Level0.jpg'),
+    fon = pygame.transform.scale(load_image('data/Level0.jpg'),
                                  (width, height))
     screen.blit(fon, (0, 0))
 
@@ -477,7 +477,7 @@ def result():
             ending = 'Где я? Куда я попал?'
 
     global game
-    fon = pygame.transform.scale(load_image('C:/Users/USER/Desktop/piton/RABOTI/Игра/data/result.png'),
+    fon = pygame.transform.scale(load_image('data/result.png'),
                                  (width, height))
     screen.blit(fon, (0, 0))
     font = pygame.font.Font(None, 30)
@@ -504,14 +504,14 @@ def result():
                     flag = True
         if flag:
             try:
-                f = open('C:/Users/USER/Desktop/piton/RABOTI/Игра/data/result.txt', 'r+',
+                f = open('data/result.txt', 'r+',
                          encoding='utf-8')
                 temp = f.readlines()[-1]
                 if temp:
                     temp = f'\n{int(temp.split()[0]) + 1} {ending}'
             except Exception:
                 print(3)
-                f = open('C:/Users/USER/Desktop/piton/RABOTI/Игра/data/result.txt', 'w',
+                f = open('data/result.txt', 'w',
                          encoding='utf-8')
                 temp = f'{1} {ending}'
             f.write(temp)
@@ -544,7 +544,7 @@ if game == 2:
 if game == 1 or game == 2:
     pygame.mouse.set_visible(False)
     sunnybackground = pygame.mixer.Sound(
-        r'C:/Users/USER/Desktop/piton/RABOTI/Игра/data/sunnybackground.mp3')
+        r'data/sunnybackground.mp3')
     sunnybackground.play(-1)
     while running:
         if next:
@@ -552,7 +552,7 @@ if game == 1 or game == 2:
                 music = False
                 sunnybackground.stop()
                 backgroundwind = pygame.mixer.Sound(
-                    r'C:/Users/USER/Desktop/piton/RABOTI/Игра/data/backgroundwind.wav')
+                    r'data/backgroundwind.wav')
                 backgroundwind.play(-1)
             pygame.mouse.set_pos(start_x.get(s), start_y.get(s))
             s = s + 1
@@ -560,7 +560,7 @@ if game == 1 or game == 2:
                 boss_killing = boss.boss_killing
                 boss.kill()
                 boss_flag = True
-            f = open('C:/Users/USER/Desktop/piton/RABOTI/Игра/data/autosave.txt', 'w')
+            f = open('data/autosave.txt', 'w')
             f.write(str(s))
             f.close()
             mountain.update()
